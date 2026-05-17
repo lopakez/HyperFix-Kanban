@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://coubeche.hypeer.cloud">
-    <img src="apps/web/public/logo-dark.svg" alt="HyperFix" width="320" />
+    <img src="apps/web/public/logo-light.svg" alt="HyperFix" width="320" />
   </a>
 </p>
 
