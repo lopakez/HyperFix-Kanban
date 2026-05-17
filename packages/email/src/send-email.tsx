@@ -24,7 +24,7 @@ function resolveFromAddress(): string | undefined {
   if (!raw) return undefined;
   const displayName = process.env.SMTP_FROM_NAME?.trim() || DEFAULT_FROM_NAME;
   const angleMatch = raw.match(/<([^>]+)>/);
-  const address = (angleMatch ? angleMatch[1] : raw).trim();
+  const address = (angleMatch?.[1] ?? raw).trim();
   return `${displayName} <${address}>`;
 }
 
