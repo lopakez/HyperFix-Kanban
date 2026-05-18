@@ -32,6 +32,10 @@ const messages = {
   },
 } as const;
 
+const clientUrl = (
+  process.env.KANEO_CLIENT_URL || "http://localhost:5173"
+).replace(/\/+$/, "");
+
 const OtpEmail = ({ otp, locale }: OtpEmailProps) => {
   const copy = messages[resolveEmailLocale(locale)];
 
@@ -40,6 +44,7 @@ const OtpEmail = ({ otp, locale }: OtpEmailProps) => {
       preview={copy.preview}
       title={copy.title}
       subtitle={copy.subtitle}
+      brandLogoSrc={`${clientUrl}/logo-dark.png`}
     >
       <Section>
         <Text style={styles.paragraph}>

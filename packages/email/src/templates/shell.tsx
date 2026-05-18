@@ -4,6 +4,7 @@ import {
   Head,
   Heading,
   Html,
+  Img,
   Preview,
   Section,
   Text,
@@ -16,6 +17,7 @@ type EmailShellProps = {
   preview: string;
   title: string;
   subtitle?: string;
+  brandLogoSrc?: string;
   children: React.ReactNode;
 };
 
@@ -23,6 +25,7 @@ export function EmailShell({
   preview,
   title,
   subtitle,
+  brandLogoSrc,
   children,
 }: EmailShellProps) {
   return (
@@ -32,7 +35,16 @@ export function EmailShell({
       <Body style={main}>
         <Container style={container}>
           <Section style={content}>
-            <Text style={badge}>HyperFix</Text>
+            {brandLogoSrc ? (
+              <Img
+                src={brandLogoSrc}
+                alt="HyperFix"
+                width="150"
+                style={brandLogo}
+              />
+            ) : (
+              <Text style={badge}>HyperFix</Text>
+            )}
             <Heading style={heading}>{title}</Heading>
             {subtitle ? <Text style={subtitleText}>{subtitle}</Text> : null}
             <Section style={body}>{children}</Section>
@@ -122,6 +134,13 @@ const badge = {
   fontSize: "12px",
   letterSpacing: "0.1em",
   textTransform: "uppercase" as const,
+};
+
+const brandLogo = {
+  display: "block",
+  height: "auto",
+  margin: "0 0 12px",
+  maxWidth: "150px",
 };
 
 const heading = {
