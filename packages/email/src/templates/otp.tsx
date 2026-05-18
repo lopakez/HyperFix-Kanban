@@ -45,6 +45,7 @@ const OtpEmail = ({ otp, locale }: OtpEmailProps) => {
       title={copy.title}
       subtitle={copy.subtitle}
       brandLogoSrc={`${clientUrl}/logo-dark.png`}
+      brandLogoDarkModeSrc={`${clientUrl}/logo-light.png`}
     >
       <Section>
         <Text style={styles.paragraph}>

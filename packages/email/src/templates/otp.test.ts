@@ -9,5 +9,6 @@ describe("OtpEmail", () => {
     expect(html).toContain("123456");
     expect(html).toContain("verification code");
     expect(html).toContain("/logo-dark.png");
+    expect(html).toContain("/logo-light.png");
   });
 });
