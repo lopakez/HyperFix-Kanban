@@ -1,18 +1,10 @@
-export function VersionDisplay() {
-  const version = __APP_VERSION__;
-  const changelogUrl =
-    "https://github.com/samalehzen/hyper/blob/main/CHANGELOG.md";
+import { Logo } from "@/components/common/logo";
 
+export function VersionDisplay() {
   return (
-    <div className="flex items-center justify-center px-2 py-1.5">
-      <a
-        href={changelogUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-xs text-muted-foreground hover:text-foreground transition-colors duration-200"
-      >
-        v{version}
-      </a>
-    </div>
+    <Logo
+      className="flex h-9 min-w-0 items-center px-1"
+      imageClassName="h-7 max-w-28 translate-y-0 object-contain"
+    />
   );
 }

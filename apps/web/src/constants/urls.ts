@@ -1,1 +1,1 @@
-export const isDemoMode = window.location.hostname === "coubeche.hypeer.cloud";
+export const isDemoMode = window.location.hostname.includes("magic");

@@ -5,7 +5,12 @@ export type ExternalLinkMetadata = {
   draft?: boolean;
   branch?: string;
   author?: string;
-  createdFrom?: "github" | "hyperfix" | "gitea" | "gitea-import" | "github-import";
+  createdFrom?:
+    | "github"
+    | "hyperfix"
+    | "gitea"
+    | "gitea-import"
+    | "github-import";
   lastCommit?: {
     sha: string;
     message: string;

@@ -15,9 +15,9 @@ describe("openapi spec helpers", () => {
     expect(normalizeApiServerUrl("https://api.coubeche.hypeer.cloud")).toBe(
       "https://api.coubeche.hypeer.cloud/api",
     );
-    expect(normalizeApiServerUrl("https://api.coubeche.hypeer.cloud/api/")).toBe(
-      "https://api.coubeche.hypeer.cloud/api",
-    );
+    expect(
+      normalizeApiServerUrl("https://api.coubeche.hypeer.cloud/api/"),
+    ).toBe("https://api.coubeche.hypeer.cloud/api");
   });
 
   it("normalizes organization auth operations and prunes components", () => {

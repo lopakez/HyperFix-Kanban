@@ -1,28 +1,29 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "vite",
-  "buildCommand": "pnpm install --frozen-lockfile && pnpm --filter @hyperfix/web build",
-  "outputDirectory": "apps/web/dist",
-  "installCommand": "pnpm install --frozen-lockfile",
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- apps/web packages i18n pnpm-lock.yaml || exit 1",
-  "rewrites": [
-    {
-      "source": "/((?!api/|.*\\.\\w+$).*)",
-      "destination": "/index.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/assets/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
-    },
-    {
-      "source": "/(favicon\\.svg|favicon\\.ico|favicon-96x96\\.png|apple-touch-icon\\.png|web-app-manifest-192x192\\.png|web-app-manifest-512x512\\.png|logo-dark\\.svg|logo-light\\.svg|site\\.webmanifest)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=86400" }
-      ]
-    }
-  ]
+	"$schema": "https://openapi.vercel.sh/vercel.json",
+	"framework": "vite",
+	"buildCommand": "pnpm install --frozen-lockfile && pnpm --filter @hyperfix/web build",
+	"outputDirectory": "apps/web/dist",
+	"installCommand": "pnpm install --frozen-lockfile",
+	"ignoreCommand": "git diff --quiet HEAD^ HEAD -- apps/web packages i18n pnpm-lock.yaml || exit 1",
+	"rewrites": [
+		{
+			"source": "/((?!api/|.*\\.\\w+$).*)",
+			"destination": "/index.html"
+		}
+	],
+	"headers": [
+		{
+			"source": "/assets/(.*)",
+			"headers": [
+				{
+					"key": "Cache-Control",
+					"value": "public, max-age=31536000, immutable"
+				}
+			]
+		},
+		{
+			"source": "/(favicon\\.svg|favicon\\.ico|favicon-96x96\\.png|apple-touch-icon\\.png|web-app-manifest-192x192\\.png|web-app-manifest-512x512\\.png|logo-dark\\.svg|logo-light\\.svg|site\\.webmanifest)",
+			"headers": [{ "key": "Cache-Control", "value": "public, max-age=86400" }]
+		}
+	]
 }

@@ -43,7 +43,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavProjects />
       </SidebarContent>
       <SidebarFooter>
-        <div className="flex items-center justify-between">
+        <div className="flex h-10 items-center justify-between gap-3 px-1">
           <VersionDisplay />
           <ThemeToggleDropdown />
         </div>

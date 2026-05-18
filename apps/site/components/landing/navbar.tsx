@@ -270,7 +270,8 @@ export function Navbar() {
             size="sm"
             variant="ghost"
             onClick={() => {
-              window.location.href = "https://coubeche.hypeer.cloud/auth/sign-in";
+              window.location.href =
+                "https://coubeche.hypeer.cloud/auth/sign-in";
             }}
           >
             Sign In
