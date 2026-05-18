@@ -19,12 +19,12 @@ export function Logo({ className = "" }: LogoProps) {
       <img
         src="/logo-dark.svg"
         alt="HyperFix"
-        className="h-28 w-auto translate-y-1 dark:hidden"
+        className="h-24 w-auto translate-y-1 dark:hidden"
       />
       <img
         src="/logo-light.svg"
         alt="HyperFix"
-        className="hidden h-28 w-auto translate-y-1 dark:block"
+        className="hidden h-24 w-auto translate-y-1 dark:block"
       />
     </Link>
   );
