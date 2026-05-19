@@ -30,44 +30,33 @@ export function EmailShell({
   brandLogoDarkModeSrc,
   children,
 }: EmailShellProps) {
+  const effectiveBrandLogoSrc = brandLogoSrc ?? `${clientUrl}/logo-dark.png`;
+  const effectiveBrandLogoDarkModeSrc =
+    brandLogoDarkModeSrc ?? `${clientUrl}/logo-light.png`;
+
   return (
     <Html>
       <Head>
-        {brandLogoDarkModeSrc ? <style>{brandLogoColorSchemeCss}</style> : null}
+        <style>{brandLogoColorSchemeCss}</style>
       </Head>
       <Preview>{preview}</Preview>
       <Body style={main}>
         <Container style={container}>
           <Section style={content}>
-            {brandLogoSrc ? (
-              brandLogoDarkModeSrc ? (
-                <>
-                  <Img
-                    src={brandLogoSrc}
-                    alt="HyperFix"
-                    width="150"
-                    className="brand-logo-light"
-                    style={brandLogo}
-                  />
-                  <Img
-                    src={brandLogoDarkModeSrc}
-                    alt="HyperFix"
-                    width="150"
-                    className="brand-logo-dark"
-                    style={brandLogoHidden}
-                  />
-                </>
-              ) : (
-                <Img
-                  src={brandLogoSrc}
-                  alt="HyperFix"
-                  width="150"
-                  style={brandLogo}
-                />
-              )
-            ) : (
-              <Text style={badge}>HyperFix</Text>
-            )}
+            <Img
+              src={effectiveBrandLogoSrc}
+              alt="HyperFix"
+              width="150"
+              className="brand-logo-light"
+              style={brandLogo}
+            />
+            <Img
+              src={effectiveBrandLogoDarkModeSrc}
+              alt="HyperFix"
+              width="150"
+              className="brand-logo-dark"
+              style={brandLogoHidden}
+            />
             <Heading style={heading}>{title}</Heading>
             {subtitle ? <Text style={subtitleText}>{subtitle}</Text> : null}
             <Section style={body}>{children}</Section>
@@ -128,6 +117,10 @@ export const styles = {
   },
 };
 
+const clientUrl = (
+  process.env.KANEO_CLIENT_URL || "http://localhost:5173"
+).replace(/\/+$/, "");
+
 const main = {
   backgroundColor: "#ffffff",
   margin: "0",
@@ -148,15 +141,6 @@ const container = {
 
 const content = {
   padding: "24px",
-};
-
-const badge = {
-  margin: "0 0 8px",
-  color: "#262626",
-  fontWeight: "600",
-  fontSize: "12px",
-  letterSpacing: "0.1em",
-  textTransform: "uppercase" as const,
 };
 
 const brandLogo = {

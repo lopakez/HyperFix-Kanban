@@ -151,7 +151,8 @@ function buildDeliveryContent(notification: {
     default:
       return {
         title: notification.title ?? "New HyperFix notification",
-        body: notification.content ?? "You have a new notification in HyperFix.",
+        body:
+          notification.content ?? "You have a new notification in HyperFix.",
       };
   }
 }

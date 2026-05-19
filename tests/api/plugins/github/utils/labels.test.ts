@@ -71,7 +71,13 @@ describe("github labels helpers", () => {
     octokit.rest.issues.removeLabel.mockRejectedValue({ status: 404 });
 
     await expect(
-      removeLabel(octokit as never, "samalehzen", "hyperfix", 21, "status:done"),
+      removeLabel(
+        octokit as never,
+        "samalehzen",
+        "hyperfix",
+        21,
+        "status:done",
+      ),
     ).resolves.toBeUndefined();
   });
 
@@ -81,7 +87,13 @@ describe("github labels helpers", () => {
     octokit.rest.issues.removeLabel.mockRejectedValue(error);
 
     await expect(
-      removeLabel(octokit as never, "samalehzen", "hyperfix", 21, "status:done"),
+      removeLabel(
+        octokit as never,
+        "samalehzen",
+        "hyperfix",
+        21,
+        "status:done",
+      ),
     ).rejects.toThrow("gone");
   });
 });

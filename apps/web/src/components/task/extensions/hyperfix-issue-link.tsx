@@ -87,7 +87,9 @@ function HyperFixIssueLinkView({ node }: NodeViewProps) {
             className="hyperfix-issue-link-chip"
           >
             {resolvedIssueKey ? (
-              <span className="hyperfix-issue-link-key">{resolvedIssueKey}</span>
+              <span className="hyperfix-issue-link-key">
+                {resolvedIssueKey}
+              </span>
             ) : null}
             <span className="hyperfix-issue-link-title">{title}</span>
           </a>
