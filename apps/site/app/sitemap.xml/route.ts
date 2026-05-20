@@ -1,6 +1,6 @@
 export const dynamic = "force-static";
 
-const SITE = "https://coubeche.hypeer.cloud";
+const SITE = "https://hyperfix.hypeer.cloud";
 
 export function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

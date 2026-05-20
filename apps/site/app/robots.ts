@@ -8,7 +8,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://coubeche.hypeer.cloud/sitemap.xml",
-    host: "https://coubeche.hypeer.cloud",
+    sitemap: "https://hyperfix.hypeer.cloud/sitemap.xml",
+    host: "https://hyperfix.hypeer.cloud",
   };
 }
