@@ -10,7 +10,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://coubeche.hypeer.cloud"),
+  metadataBase: new URL("https://hyperfix.hypeer.cloud"),
   title: {
     default: "HyperFix - Tout ce dont vous avez besoin. Rien de superflu.",
     template: "%s | HyperFix",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    url: "https://coubeche.hypeer.cloud",
+    url: "https://hyperfix.hypeer.cloud",
     siteName: "HyperFix",
     title: "HyperFix - Tout ce dont vous avez besoin. Rien de superflu.",
     description:
@@ -72,15 +72,15 @@ const jsonLd = [
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "HyperFix",
-    url: "https://coubeche.hypeer.cloud",
-    logo: "https://coubeche.hypeer.cloud/logo-512.png",
+    url: "https://hyperfix.hypeer.cloud",
+    logo: "https://hyperfix.hypeer.cloud/logo-512.png",
     sameAs: ["https://github.com/samalehzen/hyper"],
   },
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "HyperFix",
-    url: "https://coubeche.hypeer.cloud",
+    url: "https://hyperfix.hypeer.cloud",
     inLanguage: "en",
   },
   {
@@ -91,8 +91,8 @@ const jsonLd = [
     operatingSystem: "Web, Linux, macOS, Windows",
     description:
       "Open source project management that works for you, not against you. Self-hosted, simple, and powerful.",
-    url: "https://coubeche.hypeer.cloud",
-    image: "https://coubeche.hypeer.cloud/images/hero.png",
+    url: "https://hyperfix.hypeer.cloud",
+    image: "https://hyperfix.hypeer.cloud/images/hero.png",
     license: "https://github.com/samalehzen/hyper/blob/main/LICENSE",
   },
 ];
@@ -133,8 +133,8 @@ export default function RootLayout({
         />
         <Script
           defer
-          data-domain="coubeche.hypeer.cloud"
-          src="https://coubeche.hypeer.cloud/js/script.file-downloads.hash.outbound-links.pageview-props.revenue.tagged-events.js"
+          data-domain="hyperfix.hypeer.cloud"
+          src="https://hyperfix.hypeer.cloud/js/script.file-downloads.hash.outbound-links.pageview-props.revenue.tagged-events.js"
           strategy="afterInteractive"
         />
         <Script id="plausible-init" strategy="afterInteractive">
