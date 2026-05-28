@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM node:20.20.2-alpine AS api-builder
+FROM node:20.20.2-alpine AS api-builder
 
 RUN apk add --no-cache python3 make g++ && \
   corepack enable && \
@@ -44,7 +44,7 @@ COPY --from=api-builder /app/apps/api/dist ./apps/api/dist
 COPY --from=api-builder /app/apps/api/drizzle ./apps/api/drizzle
 COPY --from=api-builder /app/packages/email ./packages/email
 
-FROM --platform=$BUILDPLATFORM node:20.20.2-alpine AS web-builder
+FROM node:20.20.2-alpine AS web-builder
 
 RUN apk add --no-cache python3 make g++ && \
   corepack enable && \
