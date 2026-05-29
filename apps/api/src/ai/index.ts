@@ -100,10 +100,21 @@ ai.get(
       id: v.string(),
     }),
   ),
+  validator(
+    "query",
+    v.object({
+      workspaceId: v.pipe(
+        v.string(),
+        v.minLength(1, "Workspace ID is required"),
+      ),
+    }),
+  ),
+  workspaceAccess.fromQuery("workspaceId"),
   async (c) => {
     const userId = c.get("userId");
+    const workspaceId = c.get("workspaceId");
     const { id } = c.req.valid("param");
-    const conversation = await getConversation(id, userId);
+    const conversation = await getConversation(id, userId, workspaceId);
     return c.json(conversation);
   },
 );
@@ -127,10 +138,21 @@ ai.delete(
       id: v.string(),
     }),
   ),
+  validator(
+    "query",
+    v.object({
+      workspaceId: v.pipe(
+        v.string(),
+        v.minLength(1, "Workspace ID is required"),
+      ),
+    }),
+  ),
+  workspaceAccess.fromQuery("workspaceId"),
   async (c) => {
     const userId = c.get("userId");
+    const workspaceId = c.get("workspaceId");
     const { id } = c.req.valid("param");
-    const result = await deleteConversation(id, userId);
+    const result = await deleteConversation(id, userId, workspaceId);
     return c.json(result);
   },
 );

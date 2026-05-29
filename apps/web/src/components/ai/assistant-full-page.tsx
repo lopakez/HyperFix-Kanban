@@ -26,7 +26,7 @@ export function AssistantFullPage() {
   const { data: conversations, refetch: refetchConversations } =
     useGetConversations(workspaceId);
   const { data: loadedConversation, isLoading: isLoadingConversation } =
-    useGetConversation(conversationId);
+    useGetConversation(conversationId, workspaceId);
   const deleteConversationMutation = useDeleteConversation(workspaceId);
 
   const {
@@ -112,30 +112,32 @@ export function AssistantFullPage() {
         <div className="flex-1 overflow-y-auto p-2 space-y-1">
           {conversations && conversations.length > 0 ? (
             conversations.map((conv) => (
-              <button
+              <div
                 key={conv.id}
-                onClick={() => setConversationId(conv.id)}
-                type="button"
                 className={cn(
-                  "flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer transition-colors group text-sm w-full text-left",
+                  "flex items-center justify-between rounded-xl cursor-pointer transition-colors group text-sm w-full",
                   conversationId === conv.id
                     ? "bg-accent text-accent-foreground font-medium"
                     : "hover:bg-accent/40 text-muted-foreground hover:text-foreground",
                 )}
               >
-                <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                <button
+                  onClick={() => setConversationId(conv.id)}
+                  type="button"
+                  className="flex items-center gap-2.5 min-w-0 flex-1 text-left px-3 py-2.5 w-full bg-transparent border-none outline-none cursor-pointer"
+                >
                   <MessageSquare size={16} className="shrink-0" />
                   <span className="truncate pr-1">{conv.title}</span>
-                </div>
+                </button>
                 <button
                   onClick={(e) => handleDelete(conv.id, e)}
                   disabled={deleteConversationMutation.isPending}
                   type="button"
-                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-destructive/10 hover:text-destructive rounded-lg transition-all text-muted-foreground shrink-0"
+                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-destructive/10 hover:text-destructive rounded-lg transition-all text-muted-foreground shrink-0 mr-2 cursor-pointer border-none bg-transparent"
                 >
                   <Trash2 size={14} />
                 </button>
-              </button>
+              </div>
             ))
           ) : (
             <div className="text-center p-6 text-xs text-muted-foreground">

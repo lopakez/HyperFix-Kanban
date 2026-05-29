@@ -36,7 +36,7 @@ export function NavMain() {
       badge: null,
     },
     {
-      title: "Assistant IA",
+      title: t("navigation:sidebar.aiAssistant"),
       url: "/ai",
       isActive: window.location.pathname === "/ai",
       badge: null,

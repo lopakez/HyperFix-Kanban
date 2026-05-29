@@ -884,6 +884,11 @@ export const aiConversationTable = pgTable(
   (table) => [
     index("ai_conversation_userId_idx").on(table.userId),
     index("ai_conversation_workspaceId_idx").on(table.workspaceId),
+    index("ai_conversation_user_workspace_updated_idx").on(
+      table.userId,
+      table.workspaceId,
+      table.updatedAt,
+    ),
   ],
 );
 
@@ -904,7 +909,13 @@ export const aiMessageTable = pgTable(
     toolCalls: jsonb("tool_calls"),
     createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   },
-  (table) => [index("ai_message_conversationId_idx").on(table.conversationId)],
+  (table) => [
+    index("ai_message_conversationId_idx").on(table.conversationId),
+    index("ai_message_conv_created_idx").on(
+      table.conversationId,
+      table.createdAt,
+    ),
+  ],
 );
 
 // Auth-schema compatible aliases in schema.ts

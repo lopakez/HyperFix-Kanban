@@ -1,5 +1,6 @@
 import { Sparkles } from "lucide-react";
 import type * as React from "react";
+import { useTranslation } from "react-i18next";
 import { NavMain } from "@/components/nav-main";
 import { NavProjects } from "@/components/nav-projects";
 import { ThemeToggleDropdown } from "@/components/theme-toggle-dropdown";
@@ -20,6 +21,7 @@ import Search from "./search";
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { toggleSidebar } = useSidebar();
   const { toggle } = useAIStore();
+  const { t } = useTranslation();
 
   useRegisterShortcuts({
     modifierShortcuts: {
@@ -51,7 +53,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <button
               onClick={toggle}
               className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-sidebar-border bg-transparent text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-              title="Assistant IA (Ctrl+A / ⌘+A)"
+              title={`${t("navigation:sidebar.aiAssistant")} (Alt+A)`}
               type="button"
             >
               <Sparkles

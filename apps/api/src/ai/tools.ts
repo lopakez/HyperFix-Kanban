@@ -1,6 +1,10 @@
 import { tool } from "ai";
+import { eq } from "drizzle-orm";
+import { HTTPException } from "hono/http-exception";
 import { z } from "zod";
 import createCommentCtrl from "../activity/controllers/create-comment";
+import db from "../database";
+import { projectTable } from "../database/schema";
 import getProjectsCtrl from "../project/controllers/get-projects";
 import globalSearchCtrl from "../search/controllers/global-search";
 import createTaskCtrl from "../task/controllers/create-task";
@@ -9,7 +13,11 @@ import getTasksCtrl from "../task/controllers/get-tasks";
 import moveTaskCtrl from "../task/controllers/move-task";
 import updateTaskStatusCtrl from "../task/controllers/update-task-status";
 import { validateWorkspaceAccess } from "../utils/validate-workspace-access";
-import { assertWorkspaceTaskAccess } from "../utils/workspace-role";
+import {
+  assertAdminWorkspaceRole,
+  assertWorkspaceRole,
+  assertWorkspaceTaskAccess,
+} from "../utils/workspace-role";
 
 export function getAiTools(userId: string) {
   return {
@@ -32,9 +40,13 @@ export function getAiTools(userId: string) {
           .describe("L'ID de l'utilisateur assigné"),
       }),
       execute: async ({ projectId, status, priority, assigneeId }) => {
-        // En vérifiant l'accès à une tâche du projet, ou simplement en validant le projet, on garantit la sécurité
-        // Ici, on récupère les tâches, mais drizzle-orm va lever une erreur si le projet n'existe pas.
-        // On effectue une recherche globale ou une assertion d'accès projet (les projets n'ont pas d'assert direct mais on peut simplement interroger getTasksCtrl qui gère l'existence du projet)
+        const project = await db.query.projectTable.findFirst({
+          where: eq(projectTable.id, projectId),
+        });
+        if (!project) {
+          throw new HTTPException(404, { message: "Project not found" });
+        }
+        await validateWorkspaceAccess(userId, project.workspaceId);
         return await getTasksCtrl(projectId, { status, priority, assigneeId });
       },
     }),
@@ -126,6 +138,17 @@ export function getAiTools(userId: string) {
         priority,
         dueDate,
       }) => {
+        const project = await db.query.projectTable.findFirst({
+          where: eq(projectTable.id, projectId),
+        });
+        if (!project) {
+          throw new HTTPException(404, { message: "Project not found" });
+        }
+        await assertWorkspaceRole(userId, project.workspaceId, [
+          "owner",
+          "admin",
+          "member",
+        ]);
         return await createTaskCtrl({
           projectId,
           currentUserId: userId,
@@ -148,7 +171,8 @@ export function getAiTools(userId: string) {
           .describe("Le nouveau statut ou colonne (ex: 'in-progress', 'done')"),
       }),
       execute: async ({ taskId, status }) => {
-        await assertWorkspaceTaskAccess(taskId, userId);
+        const taskCtx = await assertWorkspaceTaskAccess(taskId, userId);
+        await assertAdminWorkspaceRole(userId, taskCtx.workspaceId);
         return await updateTaskStatusCtrl({
           id: taskId,
           status,
@@ -173,7 +197,8 @@ export function getAiTools(userId: string) {
           ),
       }),
       execute: async ({ taskId, destinationProjectId, destinationStatus }) => {
-        await assertWorkspaceTaskAccess(taskId, userId);
+        const taskCtx = await assertWorkspaceTaskAccess(taskId, userId);
+        await assertAdminWorkspaceRole(userId, taskCtx.workspaceId);
         return await moveTaskCtrl({
           taskId,
           destinationProjectId,

@@ -1,5 +1,6 @@
 import { streamText } from "ai";
 import { eq } from "drizzle-orm";
+import { HTTPException } from "hono/http-exception";
 import db from "../../database";
 import { aiConversationTable, aiMessageTable } from "../../database/schema";
 import { SYSTEM_PROMPT } from "../prompt";
@@ -19,8 +20,18 @@ export async function chat({
 }) {
   let convId = conversationId;
 
-  // 1. Si pas d'ID de conversation, on crée une nouvelle conversation
-  if (!convId) {
+  // 1. Si pas d'ID de conversation, on crée une nouvelle conversation. Sinon on vérifie la sécurité.
+  if (convId) {
+    const [existingConv] = await db
+      .select()
+      .from(aiConversationTable)
+      .where(eq(aiConversationTable.id, convId))
+      .limit(1);
+
+    if (!existingConv || existingConv.userId !== userId) {
+      throw new HTTPException(404, { message: "Conversation not found" });
+    }
+  } else {
     const [conv] = await db
       .insert(aiConversationTable)
       .values({

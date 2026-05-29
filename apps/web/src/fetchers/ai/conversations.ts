@@ -12,9 +12,10 @@ export async function getConversations(workspaceId: string) {
   return await response.json();
 }
 
-export async function getConversation(id: string) {
+export async function getConversation(id: string, workspaceId: string) {
   const response = await client.ai.conversations[":id"].$get({
     param: { id },
+    query: { workspaceId },
   });
 
   if (!response.ok) {
@@ -24,9 +25,10 @@ export async function getConversation(id: string) {
   return await response.json();
 }
 
-export async function deleteConversation(id: string) {
+export async function deleteConversation(id: string, workspaceId: string) {
   const response = await client.ai.conversations[":id"].$delete({
     param: { id },
+    query: { workspaceId },
   });
 
   if (!response.ok) {

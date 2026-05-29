@@ -218,6 +218,13 @@
 			"when": 1780068621608,
 			"tag": "0030_wandering_franklin_richards",
 			"breakpoints": true
+		},
+		{
+			"idx": 31,
+			"version": "7",
+			"when": 1780070796429,
+			"tag": "0031_gigantic_tarot",
+			"breakpoints": true
 		}
 	]
 }

@@ -3,10 +3,7 @@ import { useState } from "react";
 import { AssistantPanel } from "@/components/ai/assistant-panel";
 import CommandPalette from "@/components/command-palette";
 import SearchCommandMenu from "@/components/search-command-menu";
-import {
-  getModifierKeyText,
-  useRegisterShortcuts,
-} from "@/hooks/use-keyboard-shortcuts";
+import { useRegisterShortcuts } from "@/hooks/use-keyboard-shortcuts";
 import { useAIStore } from "@/store/ai";
 
 // layout for the main app
@@ -20,7 +17,7 @@ function RouteComponent() {
 
   useRegisterShortcuts({
     modifierShortcuts: {
-      [getModifierKeyText()]: {
+      Alt: {
         a: toggle,
       },
     },
