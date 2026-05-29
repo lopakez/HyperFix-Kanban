@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
+import { getApiUrl } from "@/fetchers/get-api-url";
 import { useDeleteConversation } from "@/hooks/mutations/ai/use-delete-conversation";
 import { useGetConversation } from "@/hooks/queries/ai/use-get-conversation";
 import { useGetConversations } from "@/hooks/queries/ai/use-get-conversations";
@@ -37,7 +38,7 @@ export function AssistantFullPage() {
     isLoading,
     setMessages,
   } = useChat({
-    api: "/api/ai/chat",
+    api: getApiUrl("ai/chat"),
     id: conversationId || undefined,
     body: {
       workspaceId,
@@ -207,7 +208,7 @@ export function AssistantFullPage() {
           <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
             <div className="flex items-center gap-2.5 bg-background border border-border rounded-2xl px-4 py-2.5 shadow-sm focus-within:ring-2 focus-within:ring-primary/20">
               <input
-                value={input}
+                value={input ?? ""}
                 onChange={handleInputChange}
                 placeholder="Discutez avec l'assistant IA..."
                 className="flex-1 bg-transparent text-sm outline-none border-none py-1.5"

@@ -4,6 +4,7 @@ import { useChat } from "@ai-sdk/react";
 import { Maximize2, PlusCircle, Send, Sparkles, X } from "lucide-react";
 import { useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
+import { getApiUrl } from "@/fetchers/get-api-url";
 import useActiveWorkspace from "@/hooks/queries/workspace/use-active-workspace";
 import { cn } from "@/lib/cn";
 import { useAIStore } from "@/store/ai";
@@ -28,7 +29,7 @@ export function AssistantPanel() {
     isLoading,
     setMessages,
   } = useChat({
-    api: "/api/ai/chat",
+    api: getApiUrl("ai/chat"),
     id: conversationId || undefined,
     body: {
       workspaceId,
@@ -141,7 +142,7 @@ export function AssistantPanel() {
       >
         <div className="flex items-center gap-2 bg-background border border-border rounded-xl px-3 py-1.5 focus-within:ring-2 focus-within:ring-primary/20">
           <input
-            value={input}
+            value={input ?? ""}
             onChange={handleInputChange}
             placeholder="Demander à l'IA..."
             className="flex-1 bg-transparent text-sm outline-none border-none py-1"
