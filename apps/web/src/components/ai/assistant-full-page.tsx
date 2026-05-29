@@ -8,9 +8,10 @@ import {
   Sparkles,
   Trash2,
 } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { getApiUrl } from "@/fetchers/get-api-url";
+import { useCreateConversation } from "@/hooks/mutations/ai/use-create-conversation";
 import { useDeleteConversation } from "@/hooks/mutations/ai/use-delete-conversation";
 import { useGetConversation } from "@/hooks/queries/ai/use-get-conversation";
 import { useGetConversations } from "@/hooks/queries/ai/use-get-conversations";
@@ -23,6 +24,9 @@ export function AssistantFullPage() {
   const { data: activeWorkspace } = useActiveWorkspace();
   const workspaceId = activeWorkspace?.id || "";
 
+  const [input, setInput] = useState("");
+  const createConversationMutation = useCreateConversation(workspaceId);
+
   // Queries & Mutations
   const { data: conversations, refetch: refetchConversations } =
     useGetConversations(workspaceId);
@@ -30,30 +34,18 @@ export function AssistantFullPage() {
     useGetConversation(conversationId, workspaceId);
   const deleteConversationMutation = useDeleteConversation(workspaceId);
 
-  const {
-    messages,
-    input,
-    handleInputChange,
-    handleSubmit,
-    isLoading,
-    setMessages,
-  } = useChat({
+  const { messages, sendMessage, status, setMessages } = useChat({
     api: getApiUrl("ai/chat"),
     id: conversationId || undefined,
     body: {
       workspaceId,
     },
-    onResponse: (response) => {
-      const xConvId = response.headers.get("X-Conversation-Id");
-      if (xConvId && xConvId !== conversationId) {
-        setConversationId(xConvId);
-        void refetchConversations();
-      }
-    },
     onFinish: () => {
       void refetchConversations();
     },
   });
+
+  const isLoading = status === "streaming" || status === "submitted";
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -80,6 +72,28 @@ export function AssistantFullPage() {
   const handleNewChat = () => {
     setConversationId(null);
     setMessages([]);
+  };
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!input.trim() || !workspaceId) return;
+
+    const messageText = input;
+    setInput("");
+
+    try {
+      let activeId = conversationId;
+      if (!activeId) {
+        const title =
+          messageText.slice(0, 50) + (messageText.length > 50 ? "..." : "");
+        const conv = await createConversationMutation.mutateAsync({ title });
+        activeId = conv.id;
+        setConversationId(conv.id);
+      }
+      sendMessage({ text: messageText });
+    } catch (error) {
+      console.error("Failed to send message:", error);
+    }
   };
 
   const handleDelete = (id: string, e: React.MouseEvent) => {
@@ -205,19 +219,17 @@ export function AssistantFullPage() {
 
         {/* Formulaire de saisie */}
         <div className="p-4 border-t border-border bg-card/50">
-          <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
+          <form onSubmit={onSubmit} className="max-w-3xl mx-auto">
             <div className="flex items-center gap-2.5 bg-background border border-border rounded-2xl px-4 py-2.5 shadow-sm focus-within:ring-2 focus-within:ring-primary/20">
               <input
-                value={input ?? ""}
-                onChange={handleInputChange}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
                 placeholder="Discutez avec l'assistant IA..."
                 className="flex-1 bg-transparent text-sm outline-none border-none py-1.5"
               />
               <button
                 type="submit"
-                disabled={
-                  isLoading || !(input ?? "").trim() || isLoadingConversation
-                }
+                disabled={isLoading || !input.trim() || isLoadingConversation}
                 className="p-2 bg-primary text-primary-foreground rounded-xl disabled:opacity-40 hover:opacity-90 transition-opacity"
               >
                 <Send size={16} />

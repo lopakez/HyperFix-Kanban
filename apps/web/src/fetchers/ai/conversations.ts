@@ -37,3 +37,15 @@ export async function deleteConversation(id: string, workspaceId: string) {
 
   return await response.json();
 }
+
+export async function createConversation(workspaceId: string, title?: string) {
+  const response = await client.ai.conversations.$post({
+    json: { workspaceId, title },
+  });
+
+  if (!response.ok) {
+    throw new Error(await response.text());
+  }
+
+  return await response.json();
+}

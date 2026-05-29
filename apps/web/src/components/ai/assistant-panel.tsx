@@ -2,9 +2,10 @@
 
 import { useChat } from "@ai-sdk/react";
 import { Maximize2, PlusCircle, Send, Sparkles, X } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { getApiUrl } from "@/fetchers/get-api-url";
+import { useCreateConversation } from "@/hooks/mutations/ai/use-create-conversation";
 import useActiveWorkspace from "@/hooks/queries/workspace/use-active-workspace";
 import { cn } from "@/lib/cn";
 import { useAIStore } from "@/store/ai";
@@ -21,27 +22,18 @@ export function AssistantPanel() {
   const { data: activeWorkspace } = useActiveWorkspace();
   const workspaceId = activeWorkspace?.id || "";
 
-  const {
-    messages,
-    input,
-    handleInputChange,
-    handleSubmit,
-    isLoading,
-    setMessages,
-  } = useChat({
+  const [input, setInput] = useState("");
+  const createConversationMutation = useCreateConversation(workspaceId);
+
+  const { messages, sendMessage, status, setMessages } = useChat({
     api: getApiUrl("ai/chat"),
     id: conversationId || undefined,
     body: {
       workspaceId,
     },
-    onResponse: (response) => {
-      const xConvId = response.headers.get("X-Conversation-Id");
-      if (xConvId && xConvId !== conversationId) {
-        setConversationId(xConvId);
-      }
-    },
   });
 
+  const isLoading = status === "streaming" || status === "submitted";
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Faire défiler vers le bas lors de la réception de nouveaux messages
@@ -56,6 +48,28 @@ export function AssistantPanel() {
   const handleNewChat = () => {
     setConversationId(null);
     setMessages([]);
+  };
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!input.trim() || !workspaceId) return;
+
+    const messageText = input;
+    setInput("");
+
+    try {
+      let activeId = conversationId;
+      if (!activeId) {
+        const title =
+          messageText.slice(0, 50) + (messageText.length > 50 ? "..." : "");
+        const conv = await createConversationMutation.mutateAsync({ title });
+        activeId = conv.id;
+        setConversationId(conv.id);
+      }
+      sendMessage({ text: messageText });
+    } catch (error) {
+      console.error("Failed to send message:", error);
+    }
   };
 
   return (
@@ -137,19 +151,19 @@ export function AssistantPanel() {
 
       {/* Input Form */}
       <form
-        onSubmit={handleSubmit}
+        onSubmit={onSubmit}
         className="p-3 bg-muted/20 border-t border-border"
       >
         <div className="flex items-center gap-2 bg-background border border-border rounded-xl px-3 py-1.5 focus-within:ring-2 focus-within:ring-primary/20">
           <input
-            value={input ?? ""}
-            onChange={handleInputChange}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
             placeholder="Demander à l'IA..."
             className="flex-1 bg-transparent text-sm outline-none border-none py-1"
           />
           <button
             type="submit"
-            disabled={isLoading || !(input ?? "").trim()}
+            disabled={isLoading || !input.trim()}
             className="p-1.5 bg-primary text-primary-foreground rounded-lg disabled:opacity-40 hover:opacity-90 transition-opacity"
           >
             <Send size={15} />

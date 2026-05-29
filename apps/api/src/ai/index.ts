@@ -3,6 +3,7 @@ import { describeRoute, validator } from "hono-openapi";
 import * as v from "valibot";
 import { workspaceAccess } from "../utils/workspace-access-middleware";
 import { chat } from "./controllers/chat";
+import { createConversation } from "./controllers/create-conversation";
 import { deleteConversation } from "./controllers/delete-conversation";
 import { getConversation } from "./controllers/get-conversation";
 import { listConversations } from "./controllers/list-conversations";
@@ -13,6 +14,38 @@ const ai = new Hono<{
     workspaceId: string;
   };
 }>();
+
+// POST /api/ai/conversations
+ai.post(
+  "/conversations",
+  describeRoute({
+    operationId: "createConversation",
+    tags: ["AI"],
+    description: "Create a new AI conversation session.",
+    responses: {
+      200: {
+        description: "Created conversation session",
+      },
+    },
+  }),
+  validator(
+    "json",
+    v.object({
+      workspaceId: v.pipe(
+        v.string(),
+        v.minLength(1, "Workspace ID is required"),
+      ),
+      title: v.optional(v.string()),
+    }),
+  ),
+  workspaceAccess.fromBody("workspaceId"),
+  async (c) => {
+    const userId = c.get("userId");
+    const { workspaceId, title } = c.req.valid("json");
+    const conversation = await createConversation(userId, workspaceId, title);
+    return c.json(conversation);
+  },
+);
 
 // POST /api/ai/chat
 ai.post(
