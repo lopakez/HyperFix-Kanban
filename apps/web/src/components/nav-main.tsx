@@ -36,6 +36,12 @@ export function NavMain() {
       badge: null,
     },
     {
+      title: "Assistant IA",
+      url: "/ai",
+      isActive: window.location.pathname === "/ai",
+      badge: null,
+    },
+    {
       title: t("navigation:sidebar.members"),
       url: `/dashboard/workspace/${workspace.id}/members`,
       isActive:
