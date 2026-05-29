@@ -214,7 +214,9 @@ export function AssistantFullPage() {
               />
               <button
                 type="submit"
-                disabled={isLoading || !input.trim() || isLoadingConversation}
+                disabled={
+                  isLoading || !(input ?? "").trim() || isLoadingConversation
+                }
                 className="p-2 bg-primary text-primary-foreground rounded-xl disabled:opacity-40 hover:opacity-90 transition-opacity"
               >
                 <Send size={16} />

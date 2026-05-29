@@ -148,7 +148,7 @@ export function AssistantPanel() {
           />
           <button
             type="submit"
-            disabled={isLoading || !input.trim()}
+            disabled={isLoading || !(input ?? "").trim()}
             className="p-1.5 bg-primary text-primary-foreground rounded-lg disabled:opacity-40 hover:opacity-90 transition-opacity"
           >
             <Send size={15} />
