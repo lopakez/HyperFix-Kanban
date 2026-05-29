@@ -92,7 +92,7 @@ export function AssistantFullPage() {
       }
       sendMessage(
         { text: messageText },
-        { body: { conversationId: activeId } },
+        { body: { workspaceId, conversationId: activeId } },
       );
     } catch (error) {
       console.error("Failed to send message:", error);
