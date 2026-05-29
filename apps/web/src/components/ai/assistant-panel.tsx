@@ -66,7 +66,10 @@ export function AssistantPanel() {
         activeId = conv.id;
         setConversationId(conv.id);
       }
-      sendMessage({ text: messageText });
+      sendMessage(
+        { text: messageText },
+        { body: { conversationId: activeId } },
+      );
     } catch (error) {
       console.error("Failed to send message:", error);
     }
